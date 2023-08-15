@@ -1,0 +1,87 @@
+name: Pre-commit auto update
+description: A GitHub Action that will automatically update your pre-commit hooks version and create a PR
+author: Brokenpip3
+branding:
+  color: green
+  icon: command
+inputs:
+  pr-create:
+    description: "Specify if you want to create the PR or not"
+    required: false
+    default: true
+  pr-title:
+    description: "PR Title"
+    required: false
+    default: "chore(pre-commit): auto update hooks"
+  pr-branch:
+    description: "PR Branch"
+    required: false
+    default: "auto-update-pre-commit-hooks"
+  pr-targetbranch:
+    description: "PR Target branch"
+    required: false
+    default: "main"
+  update-latest:
+    description: "Instead of using the latest tag use the latest commit, equals to run with '--bleeding-edge'"
+    required: false
+    default: false
+  update-freeze:
+    description: "Store hashes in rev instead of tag names, equals to run with '--freeze'"
+    required: false
+    default: false
+  update-repo:
+    description: "Only update a specifi repository, equals to run with '--repo'"
+    required: false
+    default: ""
+  update-allfiles:
+    description: "Run hooks vs all the files of the repo"
+    required: false
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+
+    - name: "setup python and cache"
+      uses: actions/setup-python@v4
+      id: python
+      with:
+        cache: 'pip'
+        cache-dependency-path: 'requirements-action.txt'
+
+    - name: "Install pre-commit"
+      run: pip install pre-commit
+      id: install
+      shell: bash
+
+    - name: "Pre-commit autoupdate"
+      id: auto-update
+      shell: bash
+      env:
+        REPO: ${{ inputs.update-repo }}
+      run: |
+        OPTS=()
+        [[ "${{ inputs.update-latest }}" = "true"  ]] && OPTS+=("--bleeding-edge")
+        [[ "${{ inputs.update-freeze }}" = "true"  ]] && OPTS+=("--freeze")
+        [[ "${REPO}" != ""  ]] && OPTS+=("--repo=$REPO")
+        pre-commit autoupdate "${OPTS[@]//\'/}"
+
+    - name: "Update all files"
+      if: inputs.update-allfiles == 'true'
+      id: update-all-files
+      shell: bash
+      run: pre-commit run --all-files
+
+    - name: "Create PR"
+      uses: peter-evans/create-pull-request@v5
+      if: inputs.pr-create == 'true'
+      id: pull-request
+      with:
+        destination_branch: ${{ inputs.pr-targetbranch }}
+        branch: ${{ inputs.pr-branch }}
+        pr_title: ${{ inputs.pr-title }}
+        pr_body: "This is an automation, check the updated pre-commit hooks and target files"
+        pr_draft: false
+        pr_allow_empty: false
+        github_token: ${{ secrets.GITHUB_TOKEN }}

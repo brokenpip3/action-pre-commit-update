@@ -92,6 +92,5 @@ runs:
         title: ${{ inputs.pr-title }}
         body: "This is an automation, check the updated pre-commit hooks and target files"
         draft: false
-        allow_empty: false
         delete-branch: true
         token: ${{ inputs.github-token }}

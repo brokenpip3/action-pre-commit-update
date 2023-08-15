@@ -87,11 +87,11 @@ runs:
       if: inputs.pr-create == 'true'
       id: pull-request
       with:
-        destination_branch: ${{ inputs.pr-targetbranch }}
+        base: ${{ inputs.pr-targetbranch }}
         branch: ${{ inputs.pr-branch }}
-        pr_title: ${{ inputs.pr-title }}
-        pr_body: "This is an automation, check the updated pre-commit hooks and target files"
-        pr_draft: false
-        pr_allow_empty: false
+        title: ${{ inputs.pr-title }}
+        body: "This is an automation, check the updated pre-commit hooks and target files"
+        draft: false
+        allow_empty: false
         delete-branch: true
-        github_token: ${{ inputs.github-token }}
+        token: ${{ inputs.github-token }}

@@ -14,6 +14,8 @@ jobs:
          uses: actions/checkout@v3
        - name: Update pre-commit hooks
          uses: brokenpip3/action-pre-commit-update@0.0.1
+         with:
+           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs

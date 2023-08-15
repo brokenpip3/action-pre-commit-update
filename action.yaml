@@ -21,6 +21,9 @@ inputs:
     description: "PR Target branch"
     required: false
     default: "main"
+  github-token:
+    description: "Github Token, required if PR create is true"
+    required: false
   update-latest:
     description: "Instead of using the latest tag use the latest commit, equals to run with '--bleeding-edge'"
     required: false
@@ -37,16 +40,26 @@ inputs:
     description: "Run hooks vs all the files of the repo"
     required: false
     default: false
+outputs:
+  update-hit:
+    description: "True/False if changes in .pre-commit-config.yaml are present"
+    value: ${{ (steps.auto-update.outputs.updates != '') }}
+  options:
+    description: "Options used in pre-commit update command"
+    value: ${{ steps.auto-update.outputs.options }}
+  cache-hit:
+    description: "True if cache-hit occurred while installing pre-commit"
+    value: ${{ steps.python.outputs.cache-hit }}
+
 
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v3
-
     - name: "setup python and cache"
       uses: actions/setup-python@v4
       id: python
       with:
+        python-version: 3.11
         cache: 'pip'
         cache-dependency-path: 'requirements-action.txt'
 
@@ -66,6 +79,8 @@ runs:
         [[ "${{ inputs.update-freeze }}" = "true"  ]] && OPTS+=("--freeze")
         [[ "${REPO}" != ""  ]] && OPTS+=("--repo=$REPO")
         pre-commit autoupdate "${OPTS[@]//\'/}"
+        echo "options=${OPTS[@]//\'/}"  >> "$GITHUB_OUTPUT"
+        git diff --quiet .pre-commit-config.yaml || echo "updates=true" >> "$GITHUB_OUTPUT"
 
     - name: "Update all files"
       if: inputs.update-allfiles == 'true'
@@ -84,4 +99,5 @@ runs:
         pr_body: "This is an automation, check the updated pre-commit hooks and target files"
         pr_draft: false
         pr_allow_empty: false
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        delete-branch: true
+        github_token: ${{ inputs.github-token }}

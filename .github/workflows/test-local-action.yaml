@@ -1,0 +1,29 @@
+name: "Test local action"
+on:
+  workflow_dispatch:
+  pull_request:
+  release:
+    types: [published]
+  push:
+    branches: ["main"]
+    tags: ["*"]
+
+jobs:
+  local_test:
+    runs-on: ubuntu-latest
+    name: local
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Auto update pre-commit hooks
+        uses: ./
+        id: pre-commit-update
+        with:
+          pr-create: false
+          update-latest: true
+      - name: Show Output
+        shell: bash
+        run: |
+          echo "Python cache hit: ${{ steps.pre-commit-update.outputs.cache-hit }}"
+          echo "Pre-commit updates are present: ${{ steps.pre-commit-update.outputs.update-hit }}"
+          echo "Pre-commit command options: ${{ steps.pre-commit-update.outputs.options }}"

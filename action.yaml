@@ -47,10 +47,6 @@ outputs:
   options:
     description: "Options used in pre-commit update command"
     value: ${{ steps.auto-update.outputs.options }}
-  cache-hit:
-    description: "True if cache-hit occurred while installing pre-commit"
-    value: ${{ steps.python.outputs.cache-hit }}
-
 
 runs:
   using: composite
@@ -60,8 +56,6 @@ runs:
       id: python
       with:
         python-version: 3.11
-        cache: 'pip'
-        cache-dependency-path: 'requirements-action.txt'
 
     - name: "Install pre-commit"
       run: pip install pre-commit

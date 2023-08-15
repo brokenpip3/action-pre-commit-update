@@ -24,6 +24,5 @@ jobs:
       - name: Show Output
         shell: bash
         run: |
-          echo "Python cache hit: ${{ steps.pre-commit-update.outputs.cache-hit }}"
           echo "Pre-commit updates are present: ${{ steps.pre-commit-update.outputs.update-hit }}"
           echo "Pre-commit command options: ${{ steps.pre-commit-update.outputs.options }}"

@@ -37,7 +37,6 @@ jobs:
 |------------------|--------------------------------------------------------------|
 | update-hit       | True/False if changes in .pre-commit-config.yaml are present |
 | options          | Options used in pre-commit update command                    |
-| cache-hit        | True if cache-hit occurred while installing pre-commit       |
 
 
 ## Notes

@@ -83,7 +83,7 @@ runs:
       run: pre-commit run --all-files
 
     - name: "Create PR"
-      uses: peter-evans/create-pull-request@v5
+      uses: peter-evans/create-pull-request@v6
       if: inputs.pr-create == 'true'
       id: pull-request
       with:

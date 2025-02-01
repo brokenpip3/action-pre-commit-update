@@ -31,7 +31,7 @@ inputs:
   update-freeze:
     description: "Store hashes in rev instead of tag names, equals to run with '--freeze'"
     required: false
-    default: false
+    default: true
   update-repo:
     description: "Only update a specifi repository, equals to run with '--repo'"
     required: false

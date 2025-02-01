@@ -13,7 +13,7 @@ jobs:
        - name: Checkout
          uses: actions/checkout@v3
        - name: Update pre-commit hooks
-         uses: brokenpip3/action-pre-commit-update@0.0.1
+         uses: brokenpip3/action-pre-commit-update@0.0.2
          with:
            github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -28,7 +28,7 @@ jobs:
 | pr-targetbranch  | `main`                                | false    | PR Target branch                                                                            |
 | github-token     |                                       | false    | Github Token, required if PR create is true                                                 |
 | update-latest    | `false`                               | false    | Instead of using the latest tag use the latest commit, equals to run with '--bleeding-edge' |
-| update-freeze    | `false`                               | false    | Store hashes in rev instead of tag names, equals to run with '--freeze'                     |
+| update-freeze    | `true`                                | false    | Store hashes in rev instead of tag names, equals to run with '--freeze'                     |
 | update-repo      |                                       | false    | Only update a specifi repository, equals to run with '--repo'                               |
 | update-allfiles  | `false`                               | false    | Run hooks vs all the files of the repo                                                      |
 

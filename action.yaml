@@ -52,7 +52,7 @@ runs:
   using: composite
   steps:
     - name: "setup python and cache"
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5
       id: python
       with:
         python-version: 3.11
@@ -83,7 +83,7 @@ runs:
       run: pre-commit run --all-files
 
     - name: "Create PR"
-      uses: peter-evans/create-pull-request@v7
+      uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
       if: inputs.pr-create == 'true'
       id: pull-request
       with:

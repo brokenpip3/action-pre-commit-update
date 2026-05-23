@@ -6,16 +6,18 @@ A GitHub Action that will automatically update your pre-commit hooks version and
 
 ``` yaml
 jobs:
-   pre-commit-update:
-     runs-on: ubuntu-latest
-     name:
-     steps:
-       - name: Checkout
-         uses: actions/checkout@v3
-       - name: Update pre-commit hooks
-         uses: brokenpip3/action-pre-commit-update@58089b10c2e135cfddfbcd36a85afdf73da5b0ce # 0.0.2
-         with:
-           github-token: ${{ secrets.GITHUB_TOKEN }}
+  pre-commit-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Update pre-commit hooks
+        uses: brokenpip3/action-pre-commit-update@c00c8a7e841303c35ca3f9d1f4ec543296de23e6 # 0.0.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs
